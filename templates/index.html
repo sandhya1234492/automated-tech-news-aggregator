@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily Global Tech News</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-content">
+      <p class="eyebrow">Daily Global Tech News Scheduler</p>
+      <h1>Technology news, in one place.</h1>
+      <p class="subtitle">Browse collected stories and read the daily briefing.</p>
+      <div class="health-row">
+        <span id="health-indicator" class="health-indicator" aria-hidden="true"></span>
+        <span id="health-status" role="status">Checking API and database…</span>
+        <button id="health-button" class="button button-outline" type="button">Check connection</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <section class="panel scheduler-panel" aria-labelledby="scheduler-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Automatic updates</p>
+          <h2 id="scheduler-heading">News refresh schedule</h2>
+        </div>
+        <span id="scheduler-badge" class="scheduler-badge">Stopped</span>
+      </div>
+      <div class="scheduler-controls">
+        <label for="schedule-interval">
+          <span>Refresh news every</span>
+          <select id="schedule-interval" name="interval">
+            <option value="1m">1 minute (testing)</option>
+            <option value="5m">5 minutes</option>
+            <option value="1h">1 hour</option>
+            <option value="1d">1 day</option>
+          </select>
+        </label>
+        <button id="start-schedule-button" class="button button-primary" type="button">Start auto refresh</button>
+        <button id="stop-schedule-button" class="button button-dark" type="button" disabled>Stop</button>
+      </div>
+      <p id="scheduler-message" class="message" role="status">
+        Starting a schedule runs a collection immediately, then repeats at the selected interval.
+      </p>
+      <p class="scheduler-note">
+        Keep this Python app running. One-minute testing makes frequent NewsAPI requests and may use your provider quota quickly.
+        The dashboard refreshes automatically while this page is open.
+      </p>
+    </section>
+
+    <section class="panel" aria-labelledby="news-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Your collection</p>
+          <h2 id="news-heading">Technology news</h2>
+        </div>
+        <button id="latest-button" class="button button-primary" type="button">Latest news</button>
+      </div>
+
+      <form id="search-form" class="filters">
+        <label class="search-field">
+          <span>Search articles</span>
+          <input id="keyword-input" name="keyword" type="search" placeholder="Try python, AI, or cloud">
+        </label>
+        <label class="category-field">
+          <span>Filter by category</span>
+          <select id="category-select" name="category">
+            <option value="">All categories</option>
+            {% for category in categories %}
+            <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <button class="button button-dark" type="submit">Search / filter</button>
+      </form>
+
+      <div class="results-heading">
+        <p id="news-message" class="message" role="status">Loading latest articles…</p>
+      </div>
+      <div id="article-list" class="article-list" aria-live="polite"></div>
+    </section>
+
+    <section class="panel briefing-panel" aria-labelledby="briefing-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Your daily read</p>
+          <h2 id="briefing-heading">Daily briefing</h2>
+        </div>
+      </div>
+      <form id="briefing-form" class="briefing-controls">
+        <label>
+          <span>Briefing date</span>
+          <input id="briefing-date" name="date" type="date" required>
+        </label>
+        <button class="button button-dark" type="submit">Load briefing</button>
+      </form>
+      <p id="briefing-message" class="message" role="status">Choose a date to load its briefing.</p>
+      <pre id="briefing-content" class="briefing-content" aria-live="polite"></pre>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Learning project · Data is served by this app’s Flask API.</p>
+  </footer>
+</body>
+</html>
